@@ -13,7 +13,7 @@
     --text: #f0eaf5;
     --muted: #8a7a9a;
     --border: #2e2040;
-    --font: "PingFang TC", "Noto Serif TC", "Microsoft JhengHei", "SimSun", serif;
+    --font: "PingFang TC", "Microsoft JhengHei", "Heiti TC", sans-serif;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -26,14 +26,13 @@
     overflow-x: hidden;
   }
 
-  /* Animated background */
   body::before {
     content: '';
     position: fixed;
     inset: 0;
-    background: 
+    background:
       radial-gradient(ellipse 60% 40% at 20% 80%, rgba(232,83,122,0.12) 0%, transparent 60%),
-      radial-gradient(ellipse 50% 50% at 80% 20%, rgba(120,60,180,0.1) 0%, transparent 60%);
+      radial-gradient(ellipse 50% 50% at 80% 20%, rgba(120,60,180,0.10) 0%, transparent 60%);
     pointer-events: none;
     z-index: 0;
   }
@@ -46,12 +45,16 @@
     padding: 40px 20px 80px;
   }
 
-  /* INTRO SCREEN */
-  #intro {
-    text-align: center;
-    padding-top: 60px;
-    animation: fadeUp 0.8s ease both;
+  .screen { display: none; }
+  .screen.active { display: block; animation: fadeUp 0.6s ease both; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
   }
+
+  /* ── INTRO ── */
+  #intro { text-align: center; padding-top: 60px; }
 
   .heart-icon {
     font-size: 56px;
@@ -59,18 +62,16 @@
     margin-bottom: 20px;
     animation: pulse 2s ease-in-out infinite;
   }
-
   @keyframes pulse {
     0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.12); }
+    50%       { transform: scale(1.12); }
   }
 
   .title {
-    font-family: var(--font);
-    font-size: clamp(26px, 6vw, 42px);
+    font-size: clamp(24px, 6vw, 40px);
     font-weight: 700;
-    letter-spacing: 0.04em;
-    line-height: 1.3;
+    letter-spacing: 0.05em;
+    line-height: 1.4;
     margin-bottom: 16px;
     background: linear-gradient(135deg, #f0eaf5 30%, var(--accent));
     -webkit-background-clip: text;
@@ -81,13 +82,13 @@
   .subtitle {
     color: var(--muted);
     font-size: 15px;
-    line-height: 1.7;
+    line-height: 1.8;
     margin-bottom: 40px;
   }
 
   .start-btn {
     background: var(--accent);
-    color: white;
+    color: #fff;
     border: none;
     padding: 16px 52px;
     font-family: var(--font);
@@ -96,33 +97,15 @@
     letter-spacing: 0.1em;
     border-radius: 50px;
     cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 0 40px rgba(232,83,122,0.3);
+    transition: all 0.25s ease;
+    box-shadow: 0 0 40px rgba(232,83,122,0.35);
   }
-
   .start-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 0 60px rgba(232,83,122,0.5);
+    box-shadow: 0 0 60px rgba(232,83,122,0.55);
   }
 
-  /* QUIZ SCREEN */
-  #quiz { display: none; animation: fadeUp 0.6s ease both; }
-
-  .progress-bar-wrap {
-    background: var(--border);
-    border-radius: 10px;
-    height: 4px;
-    margin-bottom: 36px;
-    overflow: hidden;
-  }
-
-  .progress-bar {
-    height: 100%;
-    background: linear-gradient(90deg, var(--accent), var(--accent2));
-    border-radius: 10px;
-    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
+  /* ── QUIZ ── */
   .q-counter {
     color: var(--muted);
     font-size: 13px;
@@ -131,16 +114,29 @@
     margin-bottom: 8px;
   }
 
+  .progress-bar-wrap {
+    background: var(--border);
+    border-radius: 10px;
+    height: 4px;
+    margin-bottom: 32px;
+    overflow: hidden;
+  }
+  .progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    border-radius: 10px;
+    transition: width 0.5s cubic-bezier(0.4,0,0.2,1);
+  }
+
   .question-card {
     background: var(--card);
     border: 1px solid var(--border);
     border-radius: 20px;
-    padding: 36px 32px;
+    padding: 32px 28px;
     margin-bottom: 20px;
     position: relative;
     overflow: hidden;
   }
-
   .question-card::before {
     content: '';
     position: absolute;
@@ -155,14 +151,12 @@
     letter-spacing: 0.15em;
     font-weight: 700;
     margin-bottom: 12px;
-    text-transform: uppercase;
   }
-
   .q-text {
-    font-size: clamp(16px, 4vw, 20px);
+    font-size: clamp(15px, 4vw, 19px);
     font-weight: 700;
-    line-height: 1.6;
-    letter-spacing: 0.02em;
+    line-height: 1.7;
+    letter-spacing: 0.03em;
   }
 
   .answer-btns {
@@ -170,105 +164,84 @@
     grid-template-columns: 1fr 1fr;
     gap: 14px;
   }
-
   .ans-btn {
     background: var(--card);
     border: 1px solid var(--border);
     color: var(--text);
-    padding: 18px 12px;
+    padding: 20px 12px;
     font-family: var(--font);
     font-size: 16px;
     font-weight: 700;
     letter-spacing: 0.06em;
     border-radius: 14px;
     cursor: pointer;
-    transition: all 0.25s ease;
-    position: relative;
-    overflow: hidden;
+    transition: all 0.2s ease;
   }
+  .ans-btn .emoji { font-size: 26px; display: block; margin-bottom: 8px; }
+  .ans-btn:hover { border-color: var(--accent); background: rgba(232,83,122,0.08); transform: translateY(-2px); }
 
-  .ans-btn .emoji { font-size: 24px; display: block; margin-bottom: 6px; }
-
-  .ans-btn:hover {
-    border-color: var(--accent);
-    background: rgba(232,83,122,0.08);
-    transform: translateY(-2px);
+  .dots {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 28px;
   }
-
-  .ans-btn.selected-yes {
-    border-color: var(--accent);
-    background: rgba(232,83,122,0.15);
-    box-shadow: 0 0 20px rgba(232,83,122,0.2);
+  .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--border);
+    transition: background 0.3s;
   }
+  .dot.done { background: var(--accent); }
 
-  .ans-btn.selected-no {
-    border-color: #5a9a7f;
-    background: rgba(90,154,127,0.12);
-  }
-
-  /* RESULT SCREEN */
-  #result { display: none; text-align: center; animation: fadeUp 0.8s ease both; }
+  /* ── RESULT ── */
+  #result { text-align: center; }
 
   .result-orb {
-    width: 120px;
-    height: 120px;
+    width: 110px; height: 110px;
     border-radius: 50%;
     margin: 0 auto 28px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 52px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 48px;
     position: relative;
   }
-
   .result-orb::after {
     content: '';
-    position: absolute;
-    inset: -8px;
+    position: absolute; inset: -8px;
     border-radius: 50%;
-    border: 2px solid;
+    border: 2px solid currentColor;
     opacity: 0.3;
     animation: spin 8s linear infinite;
   }
-
   @keyframes spin { to { transform: rotate(360deg); } }
 
-  .orb-dead { background: rgba(80,30,50,0.6); box-shadow: 0 0 60px rgba(180,30,60,0.3); }
-  .orb-dead::after { border-color: #e8537a; }
-
-  .orb-sleep { background: rgba(40,40,80,0.6); box-shadow: 0 0 60px rgba(80,80,200,0.3); }
-  .orb-sleep::after { border-color: #8888ff; }
-
-  .orb-alive { background: rgba(30,80,60,0.6); box-shadow: 0 0 60px rgba(80,200,120,0.3); }
-  .orb-alive::after { border-color: #5aef9f; }
+  .orb-dead  { background: rgba(80,30,50,0.6);  color: #e8537a; box-shadow: 0 0 50px rgba(180,30,60,0.3); }
+  .orb-sleep { background: rgba(40,40,80,0.6);  color: #8888ff; box-shadow: 0 0 50px rgba(80,80,200,0.3); }
+  .orb-alive { background: rgba(30,80,60,0.6);  color: #5aef9f; box-shadow: 0 0 50px rgba(80,200,120,0.3); }
 
   .result-title {
-    font-family: var(--font);
-    font-size: clamp(22px, 5vw, 32px);
+    font-size: clamp(20px, 5vw, 30px);
     font-weight: 700;
     margin-bottom: 8px;
     letter-spacing: 0.06em;
   }
-
   .result-score {
     color: var(--muted);
     font-size: 14px;
     letter-spacing: 0.1em;
     margin-bottom: 24px;
   }
-
   .result-desc {
     background: var(--card);
     border: 1px solid var(--border);
     border-radius: 16px;
     padding: 24px;
     font-size: 15px;
-    line-height: 1.85;
+    line-height: 1.9;
     color: #c8bcd8;
     margin-bottom: 32px;
     text-align: left;
   }
-
   .retry-btn {
     background: transparent;
     border: 1px solid var(--accent);
@@ -280,37 +253,9 @@
     letter-spacing: 0.1em;
     border-radius: 50px;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.25s ease;
   }
-
-  .retry-btn:hover {
-    background: var(--accent);
-    color: white;
-    box-shadow: 0 0 30px rgba(232,83,122,0.4);
-  }
-
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(24px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  .screen { display: none; }
-  .screen.active { display: block; }
-
-  /* Decorative dots */
-  .dots {
-    display: flex;
-    justify-content: center;
-    gap: 6px;
-    margin-top: 32px;
-  }
-  .dot {
-    width: 6px; height: 6px;
-    border-radius: 50%;
-    background: var(--border);
-    transition: background 0.3s;
-  }
-  .dot.active { background: var(--accent); }
+  .retry-btn:hover { background: var(--accent); color: #fff; box-shadow: 0 0 30px rgba(232,83,122,0.4); }
 </style>
 </head>
 <body>
@@ -324,7 +269,7 @@
       10 個問題，測出你的戀愛細胞<br>
       是生機勃勃、沉睡冬眠，還是瀕臨消逝
     </p>
-    <button class="start-btn" onclick="startQuiz()">開始測驗 →</button>
+    <button class="start-btn" id="startBtn">開始測驗 →</button>
   </div>
 
   <!-- QUIZ -->
@@ -338,13 +283,11 @@
       <div class="q-text" id="qText"></div>
     </div>
     <div class="answer-btns">
-      <button class="ans-btn" onclick="answer(true)">
-        <span class="emoji">😔</span>
-        符合
+      <button class="ans-btn" id="btnYes">
+        <span class="emoji">😔</span>符合
       </button>
-      <button class="ans-btn" onclick="answer(false)">
-        <span class="emoji">✨</span>
-        不符合
+      <button class="ans-btn" id="btnNo">
+        <span class="emoji">✨</span>不符合
       </button>
     </div>
     <div class="dots" id="dots"></div>
@@ -356,13 +299,12 @@
     <div class="result-title" id="resultTitle"></div>
     <div class="result-score" id="resultScore"></div>
     <div class="result-desc" id="resultDesc"></div>
-    <button class="retry-btn" onclick="restart()">再測一次</button>
+    <button class="retry-btn" id="retryBtn">再測一次</button>
   </div>
 
 </div>
-
 <script>
-const questions = [
+var questions = [
   "覺得一個人宅在家最放鬆",
   "比起認真打扮，更喜歡穿舒服輕便的衣服",
   "一個人吃飯喝酒也不覺得孤單",
@@ -375,104 +317,85 @@ const questions = [
   "最近感到「心臟砰砰跳」的時刻，只有怕上班遲到而奔跑的時候"
 ];
 
-let current = 0;
-let score = 0;
-
-const results = [
-  {
-    range: [7, 10],
-    title: "戀愛細胞瀕臨死亡",
-    orb: "orb-dead",
-    emoji: "💀",
-    desc: "你已經把自己保護得無懈可擊了。舒適圈、老朋友、熟悉的店……一切都很安全，卻也少了點意外驚喜。戀愛細胞現在需要急救，試著對陌生的事物敞開心扉吧——也許下一個讓心跳加速的理由，不只是追著公車跑。"
-  },
-  {
-    range: [4, 6],
-    title: "戀愛細胞正在冬眠",
-    orb: "orb-sleep",
-    emoji: "😴",
-    desc: "你的戀愛細胞還沒死透，只是在厚厚的棉被裡睡著了。偶爾還是會有一點悸動，但馬上又被「算了吧」蓋過去。給自己一點空間，打扮出門，也許春天比你想的更近。"
-  },
-  {
-    range: [0, 3],
-    title: "戀愛細胞還活著！",
-    orb: "orb-alive",
-    emoji: "💚",
-    desc: "恭喜你！你的戀愛細胞狀態良好，心裡還保有對感情的期待與好奇。你對生活保持開放的姿態，遇見對的人只是時間問題——繼續帶著這份心意往前走吧！"
-  }
+var results = [
+  { min: 7, title: "戀愛細胞瀕臨死亡", orb: "orb-dead", emoji: "💀",
+    desc: "你已經把自己保護得無懈可擊了。舒適圈、老朋友、熟悉的店⋯⋯一切都很安全，卻也少了點意外驚喜。戀愛細胞現在需要急救，試著對陌生的事物敞開心扉吧——也許下一個讓心跳加速的理由，不只是追著公車跑。" },
+  { min: 4, title: "戀愛細胞正在冬眠", orb: "orb-sleep", emoji: "😴",
+    desc: "你的戀愛細胞還沒死透，只是在厚厚的棉被裡睡著了。偶爾還是會有一點悸動，但馬上又被「算了吧」蓋過去。給自己一點空間，打扮出門，也許春天比你想的更近。" },
+  { min: 0, title: "戀愛細胞還活著！", orb: "orb-alive", emoji: "💚",
+    desc: "恭喜你！你的戀愛細胞狀態良好，心裡還保有對感情的期待與好奇。你對生活保持開放的姿態，遇見對的人只是時間問題——繼續帶著這份心意往前走吧！" }
 ];
 
-function startQuiz() {
-  document.getElementById('intro').classList.remove('active');
-  document.getElementById('quiz').classList.add('active');
-  current = 0;
-  score = 0;
-  renderQuestion();
-  renderDots();
+var current = 0;
+var score = 0;
+var busy = false;
+
+function showScreen(id) {
+  var screens = document.querySelectorAll('.screen');
+  for (var i = 0; i < screens.length; i++) {
+    screens[i].classList.remove('active');
+  }
+  document.getElementById(id).classList.add('active');
 }
 
 function renderDots() {
-  const dots = document.getElementById('dots');
-  dots.innerHTML = questions.map((_, i) => 
-    `<div class="dot ${i < current ? 'active' : ''}" id="dot${i}"></div>`
-  ).join('');
+  var html = '';
+  for (var i = 0; i < questions.length; i++) {
+    html += '<div class="dot' + (i < current ? ' done' : '') + '"></div>';
+  }
+  document.getElementById('dots').innerHTML = html;
 }
 
 function renderQuestion() {
   document.getElementById('qText').textContent = questions[current];
-  document.getElementById('qNum').textContent = `Q ${String(current+1).padStart(2,'0')}`;
-  document.getElementById('counter').textContent = `${current+1} / ${questions.length}`;
-  document.getElementById('progressBar').style.width = `${(current+1)/questions.length*100}%`;
-  // reset btn styles
-  document.querySelectorAll('.ans-btn').forEach(b => b.classList.remove('selected-yes','selected-no'));
+  document.getElementById('qNum').textContent = 'Q ' + (current < 9 ? '0' : '') + (current + 1);
+  document.getElementById('counter').textContent = (current + 1) + ' / ' + questions.length;
+  document.getElementById('progressBar').style.width = ((current + 1) / questions.length * 100) + '%';
+  renderDots();
+  busy = false;
 }
 
-function answer(yes) {
-  const btns = document.querySelectorAll('.ans-btn');
-  btns[0].classList.toggle('selected-yes', yes);
-  btns[1].classList.toggle('selected-no', yes);
-
+function doAnswer(yes) {
+  if (busy) return;
+  busy = true;
   if (yes) score++;
-
-  setTimeout(() => {
-    const dot = document.getElementById('dot' + current);
-    if (dot) dot.classList.add('active');
+  setTimeout(function() {
     current++;
     if (current < questions.length) {
       renderQuestion();
     } else {
       showResult();
     }
-  }, 380);
+  }, 300);
 }
 
 function showResult() {
-  document.getElementById('quiz').classList.remove('active');
-  const result = document.getElementById('result');
-  result.classList.add('active');
-
-  let r = results[2];
-  for (const res of results) {
-    if (score >= res.range[0] && score <= res.range[1]) { r = res; break; }
+  var r = results[2];
+  for (var i = 0; i < results.length; i++) {
+    if (score >= results[i].min) { r = results[i]; break; }
   }
-
-  document.getElementById('resultOrb').className = `result-orb ${r.orb}`;
-  document.getElementById('resultOrb').textContent = r.emoji;
+  var orb = document.getElementById('resultOrb');
+  orb.className = 'result-orb ' + r.orb;
+  orb.textContent = r.emoji;
   document.getElementById('resultTitle').textContent = r.title;
-  document.getElementById('resultScore').textContent = `符合 ${score} 項`;
+  document.getElementById('resultScore').textContent = '符合 ' + score + ' 項';
   document.getElementById('resultDesc').textContent = r.desc;
-
-  // Animate in
-  result.style.animation = 'none';
-  requestAnimationFrame(() => { result.style.animation = 'fadeUp 0.8s ease both'; });
+  showScreen('result');
 }
 
-function restart() {
-  document.getElementById('result').classList.remove('active');
-  document.getElementById('intro').classList.add('active');
-  document.getElementById('intro').style.animation = 'none';
-  requestAnimationFrame(() => { document.getElementById('intro').style.animation = 'fadeUp 0.8s ease both'; });
-}
+document.getElementById('startBtn').addEventListener('click', function() {
+  current = 0; score = 0; busy = false;
+  renderQuestion();
+  showScreen('quiz');
+});
+
+document.getElementById('btnYes').addEventListener('click', function() { doAnswer(true); });
+document.getElementById('btnNo').addEventListener('click',  function() { doAnswer(false); });
+
+document.getElementById('retryBtn').addEventListener('click', function() {
+  current = 0; score = 0; busy = false;
+  showScreen('intro');
+});
 </script>
 </body>
 </html>
