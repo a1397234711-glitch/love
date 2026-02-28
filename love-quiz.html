@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>你的戀愛細胞還活著嗎？</title>
+<style>
+  :root {
+    --bg: #0d0a14;
+    --card: #16111f;
+    --accent: #e8537a;
+    --accent2: #f0a0b8;
+    --text: #f0eaf5;
+    --muted: #8a7a9a;
+    --border: #2e2040;
+    --font: "PingFang TC", "Noto Serif TC", "Microsoft JhengHei", "SimSun", serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Animated background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: 
+      radial-gradient(ellipse 60% 40% at 20% 80%, rgba(232,83,122,0.12) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 50% at 80% 20%, rgba(120,60,180,0.1) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    position: relative;
+    z-index: 1;
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 40px 20px 80px;
+  }
+
+  /* INTRO SCREEN */
+  #intro {
+    text-align: center;
+    padding-top: 60px;
+    animation: fadeUp 0.8s ease both;
+  }
+
+  .heart-icon {
+    font-size: 56px;
+    display: block;
+    margin-bottom: 20px;
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.12); }
+  }
+
+  .title {
+    font-family: var(--font);
+    font-size: clamp(26px, 6vw, 42px);
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    line-height: 1.3;
+    margin-bottom: 16px;
+    background: linear-gradient(135deg, #f0eaf5 30%, var(--accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .subtitle {
+    color: var(--muted);
+    font-size: 15px;
+    line-height: 1.7;
+    margin-bottom: 40px;
+  }
+
+  .start-btn {
+    background: var(--accent);
+    color: white;
+    border: none;
+    padding: 16px 52px;
+    font-family: var(--font);
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 40px rgba(232,83,122,0.3);
+  }
+
+  .start-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 60px rgba(232,83,122,0.5);
+  }
+
+  /* QUIZ SCREEN */
+  #quiz { display: none; animation: fadeUp 0.6s ease both; }
+
+  .progress-bar-wrap {
+    background: var(--border);
+    border-radius: 10px;
+    height: 4px;
+    margin-bottom: 36px;
+    overflow: hidden;
+  }
+
+  .progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    border-radius: 10px;
+    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .q-counter {
+    color: var(--muted);
+    font-size: 13px;
+    letter-spacing: 0.1em;
+    text-align: right;
+    margin-bottom: 8px;
+  }
+
+  .question-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 36px 32px;
+    margin-bottom: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .question-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), transparent);
+  }
+
+  .q-num {
+    color: var(--accent);
+    font-size: 12px;
+    letter-spacing: 0.15em;
+    font-weight: 700;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+  }
+
+  .q-text {
+    font-size: clamp(16px, 4vw, 20px);
+    font-weight: 700;
+    line-height: 1.6;
+    letter-spacing: 0.02em;
+  }
+
+  .answer-btns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+
+  .ans-btn {
+    background: var(--card);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 18px 12px;
+    font-family: var(--font);
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .ans-btn .emoji { font-size: 24px; display: block; margin-bottom: 6px; }
+
+  .ans-btn:hover {
+    border-color: var(--accent);
+    background: rgba(232,83,122,0.08);
+    transform: translateY(-2px);
+  }
+
+  .ans-btn.selected-yes {
+    border-color: var(--accent);
+    background: rgba(232,83,122,0.15);
+    box-shadow: 0 0 20px rgba(232,83,122,0.2);
+  }
+
+  .ans-btn.selected-no {
+    border-color: #5a9a7f;
+    background: rgba(90,154,127,0.12);
+  }
+
+  /* RESULT SCREEN */
+  #result { display: none; text-align: center; animation: fadeUp 0.8s ease both; }
+
+  .result-orb {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    margin: 0 auto 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 52px;
+    position: relative;
+  }
+
+  .result-orb::after {
+    content: '';
+    position: absolute;
+    inset: -8px;
+    border-radius: 50%;
+    border: 2px solid;
+    opacity: 0.3;
+    animation: spin 8s linear infinite;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .orb-dead { background: rgba(80,30,50,0.6); box-shadow: 0 0 60px rgba(180,30,60,0.3); }
+  .orb-dead::after { border-color: #e8537a; }
+
+  .orb-sleep { background: rgba(40,40,80,0.6); box-shadow: 0 0 60px rgba(80,80,200,0.3); }
+  .orb-sleep::after { border-color: #8888ff; }
+
+  .orb-alive { background: rgba(30,80,60,0.6); box-shadow: 0 0 60px rgba(80,200,120,0.3); }
+  .orb-alive::after { border-color: #5aef9f; }
+
+  .result-title {
+    font-family: var(--font);
+    font-size: clamp(22px, 5vw, 32px);
+    font-weight: 700;
+    margin-bottom: 8px;
+    letter-spacing: 0.06em;
+  }
+
+  .result-score {
+    color: var(--muted);
+    font-size: 14px;
+    letter-spacing: 0.1em;
+    margin-bottom: 24px;
+  }
+
+  .result-desc {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    font-size: 15px;
+    line-height: 1.85;
+    color: #c8bcd8;
+    margin-bottom: 32px;
+    text-align: left;
+  }
+
+  .retry-btn {
+    background: transparent;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    padding: 14px 44px;
+    font-family: var(--font);
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .retry-btn:hover {
+    background: var(--accent);
+    color: white;
+    box-shadow: 0 0 30px rgba(232,83,122,0.4);
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .screen { display: none; }
+  .screen.active { display: block; }
+
+  /* Decorative dots */
+  .dots {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 32px;
+  }
+  .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--border);
+    transition: background 0.3s;
+  }
+  .dot.active { background: var(--accent); }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- INTRO -->
+  <div id="intro" class="screen active">
+    <span class="heart-icon">💗</span>
+    <h1 class="title">你的戀愛細胞<br>還活著嗎？</h1>
+    <p class="subtitle">
+      10 個問題，測出你的戀愛細胞<br>
+      是生機勃勃、沉睡冬眠，還是瀕臨消逝
+    </p>
+    <button class="start-btn" onclick="startQuiz()">開始測驗 →</button>
+  </div>
+
+  <!-- QUIZ -->
+  <div id="quiz" class="screen">
+    <div class="q-counter" id="counter">1 / 10</div>
+    <div class="progress-bar-wrap">
+      <div class="progress-bar" id="progressBar" style="width:10%"></div>
+    </div>
+    <div class="question-card">
+      <div class="q-num" id="qNum">Q 01</div>
+      <div class="q-text" id="qText"></div>
+    </div>
+    <div class="answer-btns">
+      <button class="ans-btn" onclick="answer(true)">
+        <span class="emoji">😔</span>
+        符合
+      </button>
+      <button class="ans-btn" onclick="answer(false)">
+        <span class="emoji">✨</span>
+        不符合
+      </button>
+    </div>
+    <div class="dots" id="dots"></div>
+  </div>
+
+  <!-- RESULT -->
+  <div id="result" class="screen">
+    <div class="result-orb" id="resultOrb"></div>
+    <div class="result-title" id="resultTitle"></div>
+    <div class="result-score" id="resultScore"></div>
+    <div class="result-desc" id="resultDesc"></div>
+    <button class="retry-btn" onclick="restart()">再測一次</button>
+  </div>
+
+</div>
+
+<script>
+const questions = [
+  "覺得一個人宅在家最放鬆",
+  "比起認真打扮，更喜歡穿舒服輕便的衣服",
+  "一個人吃飯喝酒也不覺得孤單",
+  "已經單身超過 2 年了",
+  "覺得相親、聯誼太麻煩，所以拒絕",
+  "覺得談戀愛到最後都不會有好下場",
+  "和異性聊天 3 天以上就會覺得很麻煩",
+  "最近照鏡子會覺得自己沒什麼魅力",
+  "最近約見面的都是認識很久的朋友；喜歡光顧常去的店",
+  "最近感到「心臟砰砰跳」的時刻，只有怕上班遲到而奔跑的時候"
+];
+
+let current = 0;
+let score = 0;
+
+const results = [
+  {
+    range: [7, 10],
+    title: "戀愛細胞瀕臨死亡",
+    orb: "orb-dead",
+    emoji: "💀",
+    desc: "你已經把自己保護得無懈可擊了。舒適圈、老朋友、熟悉的店……一切都很安全，卻也少了點意外驚喜。戀愛細胞現在需要急救，試著對陌生的事物敞開心扉吧——也許下一個讓心跳加速的理由，不只是追著公車跑。"
+  },
+  {
+    range: [4, 6],
+    title: "戀愛細胞正在冬眠",
+    orb: "orb-sleep",
+    emoji: "😴",
+    desc: "你的戀愛細胞還沒死透，只是在厚厚的棉被裡睡著了。偶爾還是會有一點悸動，但馬上又被「算了吧」蓋過去。給自己一點空間，打扮出門，也許春天比你想的更近。"
+  },
+  {
+    range: [0, 3],
+    title: "戀愛細胞還活著！",
+    orb: "orb-alive",
+    emoji: "💚",
+    desc: "恭喜你！你的戀愛細胞狀態良好，心裡還保有對感情的期待與好奇。你對生活保持開放的姿態，遇見對的人只是時間問題——繼續帶著這份心意往前走吧！"
+  }
+];
+
+function startQuiz() {
+  document.getElementById('intro').classList.remove('active');
+  document.getElementById('quiz').classList.add('active');
+  current = 0;
+  score = 0;
+  renderQuestion();
+  renderDots();
+}
+
+function renderDots() {
+  const dots = document.getElementById('dots');
+  dots.innerHTML = questions.map((_, i) => 
+    `<div class="dot ${i < current ? 'active' : ''}" id="dot${i}"></div>`
+  ).join('');
+}
+
+function renderQuestion() {
+  document.getElementById('qText').textContent = questions[current];
+  document.getElementById('qNum').textContent = `Q ${String(current+1).padStart(2,'0')}`;
+  document.getElementById('counter').textContent = `${current+1} / ${questions.length}`;
+  document.getElementById('progressBar').style.width = `${(current+1)/questions.length*100}%`;
+  // reset btn styles
+  document.querySelectorAll('.ans-btn').forEach(b => b.classList.remove('selected-yes','selected-no'));
+}
+
+function answer(yes) {
+  const btns = document.querySelectorAll('.ans-btn');
+  btns[0].classList.toggle('selected-yes', yes);
+  btns[1].classList.toggle('selected-no', yes);
+
+  if (yes) score++;
+
+  setTimeout(() => {
+    const dot = document.getElementById('dot' + current);
+    if (dot) dot.classList.add('active');
+    current++;
+    if (current < questions.length) {
+      renderQuestion();
+    } else {
+      showResult();
+    }
+  }, 380);
+}
+
+function showResult() {
+  document.getElementById('quiz').classList.remove('active');
+  const result = document.getElementById('result');
+  result.classList.add('active');
+
+  let r = results[2];
+  for (const res of results) {
+    if (score >= res.range[0] && score <= res.range[1]) { r = res; break; }
+  }
+
+  document.getElementById('resultOrb').className = `result-orb ${r.orb}`;
+  document.getElementById('resultOrb').textContent = r.emoji;
+  document.getElementById('resultTitle').textContent = r.title;
+  document.getElementById('resultScore').textContent = `符合 ${score} 項`;
+  document.getElementById('resultDesc').textContent = r.desc;
+
+  // Animate in
+  result.style.animation = 'none';
+  requestAnimationFrame(() => { result.style.animation = 'fadeUp 0.8s ease both'; });
+}
+
+function restart() {
+  document.getElementById('result').classList.remove('active');
+  document.getElementById('intro').classList.add('active');
+  document.getElementById('intro').style.animation = 'none';
+  requestAnimationFrame(() => { document.getElementById('intro').style.animation = 'fadeUp 0.8s ease both'; });
+}
+</script>
+</body>
+</html>
